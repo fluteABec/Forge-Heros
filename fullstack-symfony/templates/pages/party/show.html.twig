@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ party.name }} | Forge de Heros{% endblock %}
+
+{% block body %}
+    <section class="panel">
+        <div class="panel-header">
+            <h1>{{ party.name }}</h1>
+            <p>Taille max: {{ party.maxSize ?? 'Non definie' }}</p>
+        </div>
+        <p>{{ party.description }}</p>
+    </section>
+{% endblock %}

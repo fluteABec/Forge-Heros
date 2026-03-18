@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ character.name }} | Forge de Heros{% endblock %}
+
+{% block body %}
+    <section class="detail-layout">
+        <article class="detail-card">
+            {% set image = character.image ?: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=600&q=80' %}
+            <img class="detail-avatar" src="{{ image }}" alt="Avatar de {{ character.name }}">
+            <div>
+                <h1>{{ character.name }}</h1>
+                <p>Niveau {{ character.level }}</p>
+                <p>Points de vie: {{ character.healthPoints }}</p>
+            </div>
+        </article>
+
+        <article class="detail-card">
+            <h2>Caracteristiques</h2>
+            <div class="stats-list">
+                {% for key, value in abilities %}
+                    <div class="stat-row">
+                        <p>{{ key }}</p>
+                        <div class="progress-track">
+                            <span class="progress-value" style="width: {{ (value / 15) * 100 }}%"></span>
+                        </div>
+                        <p>{{ value }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </article>
+    </section>
+{% endblock %}

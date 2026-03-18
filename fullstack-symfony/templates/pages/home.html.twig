@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil | Forge de Heros{% endblock %}
+
+{% block body %}
+    <section class="hero">
+        <div>
+            <p class="eyebrow">Application Symfony Fullstack</p>
+            <h1>Forge de Heros</h1>
+            <p class="hero-text">
+                Affichage connecte aux entites Doctrine actuelles. Tu peux deja parcourir les personnages et groupes
+                stockes en base.
+            </p>
+            <div class="hero-actions">
+                <a class="button" href="{{ path('app_character_index') }}">Voir les personnages</a>
+                <a class="button button-secondary" href="{{ path('app_party_index') }}">Voir les groupes</a>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <article class="stat-card">
+                <p class="stat-value">{{ characterCount }}</p>
+                <p class="stat-label">Personnages affiches</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-value">{{ partyCount }}</p>
+                <p class="stat-label">Groupes d'aventure</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-value">{{ raceCount }}</p>
+                <p class="stat-label">Races</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-value">{{ classCount }}</p>
+                <p class="stat-label">Classes</p>
+            </article>
+        </div>
+    </section>
+{% endblock %}
