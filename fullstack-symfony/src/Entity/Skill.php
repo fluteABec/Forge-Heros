@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SkillRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
@@ -18,6 +20,17 @@ class Skill
 
     #[ORM\Column(length: 100)]
     private ?string $ability = null;
+
+    /**
+     * @var Collection<int, CharacterClass>
+     */
+    #[ORM\ManyToMany(targetEntity: CharacterClass::class, mappedBy: 'skills')]
+    private Collection $characterClasses;
+
+    public function __construct()
+    {
+        $this->characterClasses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -44,6 +57,33 @@ class Skill
     public function setAbility(string $ability): static
     {
         $this->ability = $ability;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CharacterClass>
+     */
+    public function getCharacterClasses(): Collection
+    {
+        return $this->characterClasses;
+    }
+
+    public function addCharacterClass(CharacterClass $characterClass): static
+    {
+        if (!$this->characterClasses->contains($characterClass)) {
+            $this->characterClasses->add($characterClass);
+            $characterClass->addSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCharacterClass(CharacterClass $characterClass): static
+    {
+        if ($this->characterClasses->removeElement($characterClass)) {
+            $characterClass->removeSkill($this);
+        }
 
         return $this;
     }

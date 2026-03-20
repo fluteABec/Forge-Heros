@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CharacterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
@@ -42,6 +44,29 @@ class Character
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'characters')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Race $race = null;
+
+    #[ORM\ManyToOne(inversedBy: 'characters')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CharacterClass $characterClass = null;
+
+    /**
+     * @var Collection<int, Party>
+     */
+    #[ORM\ManyToMany(targetEntity: Party::class, inversedBy: 'characters')]
+    private Collection $parties;
+
+    public function __construct()
+    {
+        $this->parties = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -164,6 +189,66 @@ class Character
     public function setImage(?string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getRace(): ?Race
+    {
+        return $this->race;
+    }
+
+    public function setRace(?Race $race): static
+    {
+        $this->race = $race;
+
+        return $this;
+    }
+
+    public function getCharacterClass(): ?CharacterClass
+    {
+        return $this->characterClass;
+    }
+
+    public function setCharacterClass(?CharacterClass $characterClass): static
+    {
+        $this->characterClass = $characterClass;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Party>
+     */
+    public function getParties(): Collection
+    {
+        return $this->parties;
+    }
+
+    public function addParty(Party $party): static
+    {
+        if (!$this->parties->contains($party)) {
+            $this->parties->add($party);
+        }
+
+        return $this;
+    }
+
+    public function removeParty(Party $party): static
+    {
+        $this->parties->removeElement($party);
 
         return $this;
     }

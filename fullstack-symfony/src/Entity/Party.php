@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PartyRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PartyRepository::class)]
@@ -21,6 +23,21 @@ class Party
 
     #[ORM\Column(nullable: true)]
     private ?int $maxSize = null;
+
+    #[ORM\ManyToOne(inversedBy: 'parties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $creator = null;
+
+    /**
+     * @var Collection<int, Character>
+     */
+    #[ORM\ManyToMany(targetEntity: Character::class, mappedBy: 'parties')]
+    private Collection $characters;
+
+    public function __construct()
+    {
+        $this->characters = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -59,6 +76,45 @@ class Party
     public function setMaxSize(?int $maxSize): static
     {
         $this->maxSize = $maxSize;
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): static
+    {
+        $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Character>
+     */
+    public function getCharacters(): Collection
+    {
+        return $this->characters;
+    }
+
+    public function addCharacter(Character $character): static
+    {
+        if (!$this->characters->contains($character)) {
+            $this->characters->add($character);
+            $character->addParty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCharacter(Character $character): static
+    {
+        if ($this->characters->removeElement($character)) {
+            $character->removeParty($this);
+        }
 
         return $this;
     }
