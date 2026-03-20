@@ -18,22 +18,30 @@
         </div>
 
         <div class="stats-grid">
-            <article class="stat-card">
-                <p class="stat-value">{{ characterCount }}</p>
-                <p class="stat-label">Personnages affiches</p>
-            </article>
-            <article class="stat-card">
-                <p class="stat-value">{{ partyCount }}</p>
-                <p class="stat-label">Groupes d'aventure</p>
-            </article>
-            <article class="stat-card">
-                <p class="stat-value">{{ raceCount }}</p>
-                <p class="stat-label">Races</p>
-            </article>
-            <article class="stat-card">
-                <p class="stat-value">{{ classCount }}</p>
-                <p class="stat-label">Classes</p>
-            </article>
+            <a class="stat-card-link" href="{{ path('app_user_index') }}">
+                <article class="stat-card">
+                    <p class="stat-value">{{ userCount }}</p>
+                    <p class="stat-label">Utilisateurs</p>
+                </article>
+            </a>
+            <a class="stat-card-link" href="{{ path('app_skill_index') }}">
+                <article class="stat-card">
+                    <p class="stat-value">{{ skillCount }}</p>
+                    <p class="stat-label">Compétences</p>
+                </article>
+            </a>
+            <a class="stat-card-link" href="{{ path('app_race_index') }}">
+                <article class="stat-card">
+                    <p class="stat-value">{{ raceCount }}</p>
+                    <p class="stat-label">Races</p>
+                </article>
+            </a>
+            <a class="stat-card-link" href="{{ path('app_character_class_index') }}">
+                <article class="stat-card">
+                    <p class="stat-value">{{ classCount }}</p>
+                    <p class="stat-label">Classes</p>
+                </article>
+            </a>
         </div>
     </section>
 {% endblock %}

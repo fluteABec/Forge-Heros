@@ -15,12 +15,18 @@
     <body>
         <div class="page-shell">
             <header class="topbar">
-                <a class="brand" href="{{ path('app_home') }}">Forge de Heros</a>
+                <div>
+                    <a class="brand" href="{{ path('app_home') }}">Forge de Heros -</a>
+                    {% if app.user %}
+                    <p class="brand">- {{ app.user.getUsername }}</p>
+                    {% endif %}
+                </div>
 
                 <nav class="nav-links" aria-label="Main navigation">
                     <a href="{{ path('app_home') }}">Accueil</a>
                     <a href="{{ path('app_character_index') }}">Personnages</a>
                     <a href="{{ path('app_party_index') }}">Groupes</a>
+                    <a class="button-secondary" href="{{ path('app_login') }}">Connexion</a>
                 </nav>
             </header>
 

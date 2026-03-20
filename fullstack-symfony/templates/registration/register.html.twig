@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+    {% if app.user %}
+        <div class="mb-3">
+            Vous êtes connecté en tant que {{ app.user.getUsername }}, <a href="{{ logout_path() }}">Déconnexion</a>
+        </div>
+    {% endif %}
+
+    <h1>Connexion</h1>
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Mot de Passe'
+        }) }}
+        {{ form_row(registrationForm.username, {
+            label: 'Nom d\'Utilisateur'
+        }) }}
+        {{ form_row(registrationForm.agreeTerms, {
+            label: 'Accepter les conditions d\'utilisation'
+        }) }}
+
+        <button type="submit" class="button-secondary">Créer</button>
+    {{ form_end(registrationForm) }}
+
+    <div>
+        <p>Vous avez déjà un compte ?</p>
+        <a class="button" href="{{ path('app_login') }}">Connectez vous !</a>
+    </div>
+{% endblock %}
