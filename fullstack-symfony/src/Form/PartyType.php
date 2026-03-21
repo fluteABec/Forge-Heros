@@ -2,28 +2,30 @@
 
 namespace App\Form;
 
-use App\Entity\CharacterClass;
-use App\Entity\Skill;
+use App\Entity\Character;
+use App\Entity\Party;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CharacterClassType extends AbstractType
+class PartyType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name')
             ->add('description')
-            ->add('healthDice')
-            ->add('skills', EntityType::class, [
-                'class' => Skill::class,
-                'choice_label' => 'name',
+            ->add('maxSize')
+            ->add('creator', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'id',
+            ])
+            ->add('characters', EntityType::class, [
+                'class' => Character::class,
+                'choice_label' => 'id',
                 'multiple' => true,
-                'expanded' => true,
-                'label' => 'Competences',
-                'help' => 'Choisis entre 2 et 4 competences pour cette classe.',
             ])
         ;
     }
@@ -31,7 +33,7 @@ class CharacterClassType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => CharacterClass::class,
+            'data_class' => Party::class,
         ]);
     }
 }

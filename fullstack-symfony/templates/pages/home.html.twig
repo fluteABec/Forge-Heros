@@ -3,18 +3,14 @@
 {% block title %}Accueil | Forge de Heros{% endblock %}
 
 {% block body %}
+    {% if admin %}
     <section class="hero">
         <div>
-            <p class="eyebrow">Application Symfony Fullstack</p>
+            <p class="eyebrow">Panel de modification administrateur</p>
             <h1>Forge de Heros</h1>
             <p class="hero-text">
-                Affichage connecte aux entites Doctrine actuelles. Tu peux deja parcourir les personnages et groupes
-                stockes en base.
+                Possibilté de voir la liste des utilisateurs, de modifier les classes, compétences et races
             </p>
-            <div class="hero-actions">
-                <a class="button" href="{{ path('app_character_index') }}">Voir les personnages</a>
-                <a class="button button-secondary" href="{{ path('app_party_index') }}">Voir les groupes</a>
-            </div>
         </div>
 
         <div class="stats-grid">
@@ -42,6 +38,171 @@
                     <p class="stat-label">Classes</p>
                 </article>
             </a>
+        </div>
+    </section>
+    {% endif %}
+
+    <section class="hero">
+        <div>
+            <p class="eyebrow">Accueil</p>
+            <h1>Bienvenue sur Forge de Heros</h1>
+            <p class="hero-text">
+                Forge de Heros est un projet de gestion d'univers fantasy qui permet de consulter des races,
+                des classes et des competences, puis de constituer tes personnages et tes groupes d'aventure.
+            </p>
+            <p class="hero-text">
+                L'idee est simple : preparer facilement une base de jeu claire, retrouver les informations importantes
+                en un coup d'oeil et organiser tes aventuriers dans des equipes pretes a partir en mission.
+            </p>
+
+            {% if app.user %}
+                <div class="hero-actions">
+                    <a class="button" href="{{ path('app_character_index') }}">Acceder a mes personnages</a>
+                    <a class="button button-secondary" href="{{ path('app_party_index') }}">Acceder a mes groupes</a>
+                </div>
+            {% else %}
+                <div class="hero-actions">
+                    <a class="button" href="{{ path('app_login') }}">Se connecter</a>
+                    <a class="button button-secondary" href="{{ path('app_register') }}">Creer un compte</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="stats-grid">
+            <article class="stat-card">
+                <p class="stat-value">{{ raceCount }}</p>
+                <p class="stat-label">Races disponibles</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-value">{{ classCount }}</p>
+                <p class="stat-label">Classes disponibles</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-value">{{ skillCount }}</p>
+                <p class="stat-label">Competences repertoriees</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-value">{{ userCount }}</p>
+                <p class="stat-label">Aventuriers inscrits</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="panel home-section">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Le projet</p>
+                <h2>Une forge pour creer et organiser ton aventure</h2>
+            </div>
+            <p class="section-text">
+                Forge de Heros rassemble les briques principales d'un univers heroic fantasy : les profils de
+                personnage, les classes, les races, les competences et les groupes d'exploration.
+            </p>
+        </div>
+
+        <div class="card-grid">
+            <article class="card card-compact">
+                <div class="card-body">
+                    <h3>Creer des personnages</h3>
+                    <p>
+                        Donne une identite a chaque heros avec son nom, son niveau, ses statistiques, ses points de
+                        vie et plus tard son image et son historique.
+                    </p>
+                </div>
+            </article>
+            <article class="card card-compact">
+                <div class="card-body">
+                    <h3>Explorer les races et classes</h3>
+                    <p>
+                        Retrouve rapidement les archetypes disponibles pour preparer une fiche cohérente et imaginer
+                        des personnages adaptes a ton style de jeu.
+                    </p>
+                </div>
+            </article>
+            <article class="card card-compact">
+                <div class="card-body">
+                    <h3>Former des groupes</h3>
+                    <p>
+                        Assemble plusieurs personnages dans une meme equipe pour suivre tes compositions et preparer
+                        de futures campagnes ou sessions de jeu.
+                    </p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="panel home-section">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Fonctionnement</p>
+                <h2>Comment utiliser Forge de Heros</h2>
+            </div>
+        </div>
+
+        <div class="home-steps">
+            <article class="stat-card">
+                <p class="step-number">01</p>
+                <h3>Choisis une base</h3>
+                <p class="stat-label">
+                    Consulte les races, les classes et les competences disponibles pour definir l'identite generale
+                    de ton futur personnage.
+                </p>
+            </article>
+            <article class="stat-card">
+                <p class="step-number">02</p>
+                <h3>Construis ta fiche</h3>
+                <p class="stat-label">
+                    Renseigne le nom, le niveau, les caracteristiques principales et les points de vie pour obtenir
+                    un hero pret a etre utilise.
+                </p>
+            </article>
+            <article class="stat-card">
+                <p class="step-number">03</p>
+                <h3>Reunis ton equipe</h3>
+                <p class="stat-label">
+                    Place ensuite tes personnages dans des groupes afin de visualiser plus facilement les
+                    compositions de ton univers ou de ta campagne.
+                </p>
+            </article>
+        </div>
+    </section>
+
+    <section class="hero hero-large">
+        <div>
+            <p class="eyebrow">Commencer</p>
+            <h2>Pret a forger ta prochaine compagnie ?</h2>
+            <p class="hero-text">
+                Cette page d'accueil sert de point d'entree au projet. Tu peux deja parcourir les donnees existantes
+                et, a mesure que les pages evoluent, tu pourras gerer tes propres personnages et tes groupes plus
+                finement.
+            </p>
+            <p class="hero-text">
+                Pour l'instant, les liens ci-dessous servent de base de navigation. Tu pourras enrichir ensuite les
+                pages detaillees avec la creation, la modification et la gestion complete de ton contenu.
+            </p>
+
+            {% if app.user %}
+                <div class="hero-actions">
+                    <a class="button" href="{{ path('app_character_index') }}">Voir mes personnages</a>
+                    <a class="button button-secondary" href="{{ path('app_party_index') }}">Voir mes groupes</a>
+                </div>
+            {% else %}
+                <div class="hero-actions">
+                    <a class="button" href="{{ path('app_login') }}">Me connecter</a>
+                    <a class="button button-secondary" href="{{ path('app_register') }}">M'inscrire</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="home-aside">
+            <article class="stat-card">
+                <h3>Ce que tu peux deja consulter</h3>
+                <p class="stat-label">Les personnages publics, les groupes existants, les classes, les races et les competences deja enregistres.</p>
+            </article>
+            <article class="stat-card">
+                <h3>Ce qui viendra ensuite</h3>
+                <p class="stat-label">La gestion plus complete de tes fiches, de tes equipes et des interactions entre les differentes entites du projet.</p>
+            </article>
         </div>
     </section>
 {% endblock %}

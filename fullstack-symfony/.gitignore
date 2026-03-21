@@ -19,5 +19,8 @@
 /assets/vendor/
 ###< symfony/asset-mapper ###
 
+/public/uploads/characters/*
+!/public/uploads/characters/.gitignore
+
 # IDE files
 /.idea/

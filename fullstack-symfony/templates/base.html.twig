@@ -26,7 +26,11 @@
                     <a href="{{ path('app_home') }}">Accueil</a>
                     <a href="{{ path('app_character_index') }}">Personnages</a>
                     <a href="{{ path('app_party_index') }}">Groupes</a>
-                    <a class="button-secondary" href="{{ path('app_login') }}">Connexion</a>
+                    {% if app.user %}
+                        <a class="button-secondary" href="{{ path('app_logout') }}">Se déconnecter</a>
+                    {% else %}
+                        <a class="button-secondary" href="{{ path('app_login') }}">Connexion</a>
+                    {% endif %}
                 </nav>
             </header>
 

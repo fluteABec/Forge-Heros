@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Character{% endblock %}
+
+{% block body %}
+    <section class="form-page">
+        <div class="panel">
+            <p class="eyebrow">Modification</p>
+            <h1>Edit Character</h1>
+            <p class="hero-text">
+                Modifie les informations de ton personnage. Les regles de creation simplifiees restent rappelees
+                dans le panneau de droite pour garder les bons reperes.
+            </p>
+
+            {{ include('character/_form.html.twig', {'button_label': 'Update'}) }}
+
+            <div class="hero-actions">
+                <a class="text-link" href="{{ path('app_character_index') }}">back to list</a>
+                {{ include('character/_delete_form.html.twig') }}
+            </div>
+        </div>
+
+        <aside class="panel info-panel">
+            <p class="eyebrow">Regles</p>
+            <h2>Points d'information</h2>
+
+            <div class="info-block">
+                <h3>Caracteristiques</h3>
+                <p>
+                    Chaque caracteristique doit avoir une valeur comprise entre 8 et 15.
+                    La valeur de depart de chaque caracteristique est 8, pour un cout de 0 point.
+                    Chaque point au-dessus de 8 coute 1 point. Vous disposez de 27 points.
+                </p>
+            </div>
+
+            <div class="info-block">
+                <h3>Points de vie</h3>
+                <p>
+                    Les points de vie sont calcules automatiquement au niveau 1 selon une formule simplifiee de
+                    D&amp;D 5e :
+                </p>
+                <p class="formula">PV = maximum du de de vie + modificateur de Constitution</p>
+            </div>
+
+            <div class="info-block">
+                <h3>Modificateur de Constitution</h3>
+                <p>
+                    Le modificateur de Constitution est calcule ainsi :
+                </p>
+                <p class="formula">(constitution - 10) / 2</p>
+                <p class="stat-label">Le resultat est ensuite arrondi a l'inferieur.</p>
+            </div>
+        </aside>
+    </section>
+{% endblock %}

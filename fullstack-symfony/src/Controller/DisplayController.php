@@ -28,78 +28,18 @@ final class DisplayController extends AbstractController
     #[Route('/', name: 'app_home', methods: ['GET'])]
     public function home(): Response
     {
+        $user = $this->getUser();
+        $admin = $user && in_array('ROLE_ADMIN', $user->getRoles(), true);
+
         return $this->render('pages/home.html.twig', [
             'userCount' => $this->userRepository->count([]),
             'skillCount' => $this->skillRepository->count([]),
             'raceCount' => $this->raceRepository->count([]),
             'classCount' => $this->characterClassRepository->count([]),
+            'admin' => $admin,
         ]);
     }
 
-    #[Route('/characters', name: 'app_character_index', methods: ['GET'])]
-    public function characters(Request $request): Response
-    {
-        $search = trim((string) $request->query->get('q', ''));
-
-        $queryBuilder = $this->characterRepository->createQueryBuilder('c')
-            ->orderBy('c.name', 'ASC');
-
-        if ($search !== '') {
-            $queryBuilder
-                ->andWhere('LOWER(c.name) LIKE :search')
-                ->setParameter('search', '%'.mb_strtolower($search).'%');
-        }
-
-        return $this->render('pages/character/index.html.twig', [
-            'characters' => $queryBuilder->getQuery()->getResult(),
-            'filters' => [
-                'q' => $search,
-            ],
-        ]);
-    }
-
-    #[Route('/characters/{id}', name: 'app_character_show', requirements: ['id' => '\\d+'], methods: ['GET'])]
-    public function characterShow(int $id): Response
-    {
-        $character = $this->characterRepository->find($id);
-        if (!$character) {
-            throw $this->createNotFoundException('Character not found.');
-        }
-        \assert($character instanceof Character);
-
-        return $this->render('pages/character/show.html.twig', [
-            'character' => $character,
-            'abilities' => [
-                'STR' => $character->getStrength(),
-                'DEX' => $character->getDexterity(),
-                'CON' => $character->getConstitution(),
-                'INT' => $character->getIntelligence(),
-                'WIS' => $character->getWisdom(),
-                'CHA' => $character->getCharisma(),
-            ],
-        ]);
-    }
-
-    #[Route('/parties', name: 'app_party_index', methods: ['GET'])]
-    public function parties(Request $request): Response
-    {
-        return $this->render('pages/party/index.html.twig', [
-            'parties' => $this->partyRepository->findBy([], ['name' => 'ASC']),
-        ]);
-    }
-
-    #[Route('/parties/{id}', name: 'app_party_show', requirements: ['id' => '\\d+'], methods: ['GET'])]
-    public function partyShow(int $id): Response
-    {
-        $party = $this->partyRepository->find($id);
-        if (!$party) {
-            throw $this->createNotFoundException('Party not found.');
-        }
-
-        return $this->render('pages/party/show.html.twig', [
-            'party' => $party,
-        ]);
-    }
 
     #[Route('/users', name: 'app_user_index', methods: ['GET'])]
     public function users(userRepository $userRepository): Response

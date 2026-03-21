@@ -75,7 +75,7 @@ a {
 .main-content {
     margin-top: 1.25rem;
     display: grid;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .hero {
@@ -87,6 +87,11 @@ a {
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     padding: 1.3rem;
+}
+
+.hero-large {
+    padding: 2rem;
+    gap: 1.5rem;
 }
 
 .eyebrow {
@@ -138,6 +143,24 @@ p {
     color: var(--text);
 }
 
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    background: var(--brand);
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: var(--brand-hover);
+}
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -175,6 +198,42 @@ p {
     padding: 1rem;
 }
 
+.home-section {
+    padding: 1.75rem;
+}
+
+.section-heading {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-text {
+    color: var(--text-soft);
+    line-height: 1.65;
+}
+
+.home-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.step-number {
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--brand);
+}
+
+.home-aside {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+}
+
 .panel-header {
     display: flex;
     align-items: baseline;
@@ -184,6 +243,83 @@ p {
 
 .panel-header p {
     color: var(--text-soft);
+}
+
+.app-form {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+    max-width: 720px;
+}
+
+.point-buy-box {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.95rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-muted);
+}
+
+.point-buy-text {
+    margin-bottom: 0;
+    font-size: 1.05rem;
+}
+
+.is-invalid {
+    color: #9d2b1f;
+}
+
+.app-form > div {
+    display: grid;
+    gap: 0.4rem;
+}
+
+.app-form label {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.app-form input,
+.app-form textarea,
+.app-form select {
+    width: min(100%, 560px);
+    padding: 0.75rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fffdf9;
+    color: var(--text);
+    box-shadow: inset 0 1px 2px rgb(38 25 13 / 4%);
+}
+
+.app-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.app-form input:focus,
+.app-form textarea:focus,
+.app-form select:focus {
+    outline: 2px solid rgb(141 79 32 / 18%);
+    border-color: var(--brand);
+}
+
+.app-form .help-text,
+.app-form small {
+    color: var(--text-soft);
+}
+
+.app-form ul {
+    margin: 0;
+    padding-left: 1rem;
+    color: #9d2b1f;
+}
+
+.app-form input[type="checkbox"],
+.app-form input[type="radio"] {
+    width: auto;
+    margin-right: 0.45rem;
+    box-shadow: none;
 }
 
 .table {
@@ -275,6 +411,73 @@ p {
     padding: 1rem;
 }
 
+.character-card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.character-card {
+    overflow: hidden;
+}
+
+.character-card-image,
+.character-card-placeholder {
+    width: 100%;
+    height: 180px;
+}
+
+.character-card-image {
+    object-fit: cover;
+    display: block;
+}
+
+.character-card-placeholder {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--surface-muted), var(--bg-accent));
+    color: var(--text-soft);
+    font-weight: 600;
+}
+
+.character-card-body {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.character-card-header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.character-card-title {
+    margin-bottom: 0.2rem;
+}
+
+.character-hp-badge {
+    white-space: nowrap;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface-muted);
+    padding: 0.45rem 0.75rem;
+    font-weight: 700;
+}
+
+.character-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.55rem;
+}
+
+.stat-value-small {
+    margin: 0.2rem 0 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
 .text-link {
     color: var(--brand);
     text-decoration: none;
@@ -289,6 +492,38 @@ p {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1rem;
+}
+
+.form-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.info-panel {
+    display: grid;
+    gap: 1rem;
+    position: sticky;
+    top: 1rem;
+}
+
+.info-block {
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-muted);
+}
+
+.info-block h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.formula {
+    margin: 0;
+    font-weight: 700;
+    color: var(--brand);
 }
 
 .detail-card {
@@ -316,6 +551,29 @@ p {
     grid-template-columns: 48px 1fr 34px;
     align-items: center;
     gap: 0.6rem;
+}
+
+@media (max-width: 900px) {
+    .hero,
+    .section-heading,
+    .home-steps,
+    .form-page {
+        grid-template-columns: 1fr;
+    }
+
+    .info-panel {
+        position: static;
+    }
+
+    .character-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .character-card-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .stat-row p {

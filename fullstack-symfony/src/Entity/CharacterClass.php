@@ -6,6 +6,7 @@ use App\Repository\CharacterClassRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CharacterClassRepository::class)]
 class CharacterClass
@@ -34,6 +35,12 @@ class CharacterClass
      * @var Collection<int, Skill>
      */
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'characterClasses')]
+    #[Assert\Count(
+        min: 2,
+        max: 4,
+        minMessage: 'Une classe doit avoir au moins {{ limit }} competences.',
+        maxMessage: 'Une classe ne peut pas avoir plus de {{ limit }} competences.'
+    )]
     private Collection $skills;
 
     public function __construct()

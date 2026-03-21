@@ -6,6 +6,7 @@ use App\Repository\CharacterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
 class Character
@@ -19,24 +20,59 @@ class Character
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\Range(
+        min: 1,
+        max: 20,
+        notInRangeMessage: 'Le niveau doit etre compris entre {{ min }} et {{ max }}.'
+    )]
     private ?int $level = null;
 
     #[ORM\Column]
+    #[Assert\Range(
+        min: 8,
+        max: 15,
+        notInRangeMessage: 'Cette caracteristique doit etre comprise entre {{ min }} et {{ max }}.'
+    )]
     private ?int $strength = null;
 
     #[ORM\Column]
+    #[Assert\Range(
+        min: 8,
+        max: 15,
+        notInRangeMessage: 'Cette caracteristique doit etre comprise entre {{ min }} et {{ max }}.'
+    )]
     private ?int $dexterity = null;
 
     #[ORM\Column]
+    #[Assert\Range(
+        min: 8,
+        max: 15,
+        notInRangeMessage: 'Cette caracteristique doit etre comprise entre {{ min }} et {{ max }}.'
+    )]
     private ?int $constitution = null;
 
     #[ORM\Column]
+    #[Assert\Range(
+        min: 8,
+        max: 15,
+        notInRangeMessage: 'Cette caracteristique doit etre comprise entre {{ min }} et {{ max }}.'
+    )]
     private ?int $intelligence = null;
 
     #[ORM\Column]
+    #[Assert\Range(
+        min: 8,
+        max: 15,
+        notInRangeMessage: 'Cette caracteristique doit etre comprise entre {{ min }} et {{ max }}.'
+    )]
     private ?int $wisdom = null;
 
     #[ORM\Column]
+    #[Assert\Range(
+        min: 8,
+        max: 15,
+        notInRangeMessage: 'Cette caracteristique doit etre comprise entre {{ min }} et {{ max }}.'
+    )]
     private ?int $charisma = null;
 
     #[ORM\Column]
@@ -251,5 +287,32 @@ class Character
         $this->parties->removeElement($party);
 
         return $this;
+    }
+
+    public function validatePointBuy(ExecutionContextInterface $context): void
+    {
+        $stats = [
+            $this->strength,
+            $this->dexterity,
+            $this->constitution,
+            $this->intelligence,
+            $this->wisdom,
+            $this->charisma,
+        ];
+
+        if (in_array(null, $stats, true)) {
+            return;
+        }
+
+        $totalCost = array_sum(array_map(
+            static fn (int $value): int => $value - 8,
+            $stats
+        ));
+
+        if ($totalCost > 27) {
+            $context->buildViolation('La repartition des caracteristiques depasse 27 points.')
+                ->atPath('strength')
+                ->addViolation();
+        }
     }
 }

@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Character index{% endblock %}
+
+{% block body %}
+    <section class="panel">
+        <div class="panel-header">
+            <div>
+                <p class="eyebrow">Personnages</p>
+                <h1>Character index</h1>
+            </div>
+            <a class="button" href="{{ path('app_character_new') }}">Create new</a>
+        </div>
+
+        <div class="character-card-grid">
+        {% for character in characters %}
+            <article class="card character-card">
+                {% if character.image %}
+                    <img
+                        class="character-card-image"
+                        src="{{ asset('uploads/characters/' ~ character.image) }}"
+                        alt="{{ character.name }}"
+                    >
+                {% else %}
+                    <div class="character-card-placeholder">
+                        <span>No image</span>
+                    </div>
+                {% endif %}
+
+                <div class="card-body character-card-body">
+                    <div class="character-card-header">
+                        <div>
+                            <h2 class="character-card-title">{{ character.name }}</h2>
+                            <p class="stat-label">Niveau {{ character.level }}</p>
+                        </div>
+                        <div class="character-hp-badge">{{ character.healthPoints }} PV</div>
+                    </div>
+
+                    <div class="character-stats-grid">
+                        <article class="stat-card">
+                            <p class="stat-label">STR</p>
+                            <p class="stat-value-small">{{ character.strength }}</p>
+                        </article>
+                        <article class="stat-card">
+                            <p class="stat-label">DEX</p>
+                            <p class="stat-value-small">{{ character.dexterity }}</p>
+                        </article>
+                        <article class="stat-card">
+                            <p class="stat-label">CON</p>
+                            <p class="stat-value-small">{{ character.constitution }}</p>
+                        </article>
+                        <article class="stat-card">
+                            <p class="stat-label">INT</p>
+                            <p class="stat-value-small">{{ character.intelligence }}</p>
+                        </article>
+                        <article class="stat-card">
+                            <p class="stat-label">WIS</p>
+                            <p class="stat-value-small">{{ character.wisdom }}</p>
+                        </article>
+                        <article class="stat-card">
+                            <p class="stat-label">CHA</p>
+                            <p class="stat-value-small">{{ character.charisma }}</p>
+                        </article>
+                    </div>
+
+                    <div class="hero-actions">
+                        <a class="text-link" href="{{ path('app_character_show', {'id': character.id}) }}">show</a>
+                        <a class="text-link" href="{{ path('app_character_edit', {'id': character.id}) }}">edit</a>
+                    </div>
+                </div>
+            </article>
+        {% else %}
+            <p class="stat-label">no records found</p>
+        {% endfor %}
+        </div>
+    </section>
+{% endblock %}
