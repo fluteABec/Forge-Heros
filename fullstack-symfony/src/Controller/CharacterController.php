@@ -19,7 +19,7 @@ final class CharacterController extends AbstractController
     public function index(CharacterRepository $characterRepository): Response
     {
         return $this->render('character/index.html.twig', [
-            'characters' => $characterRepository->findAll(),
+            'characters' => $characterRepository->findBy(['user' => $this->getUser()]),
         ]);
     }
 
