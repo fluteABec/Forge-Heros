@@ -82,6 +82,27 @@ class DefaultSkill extends Fixture
         $deception->setName('Tromperie');
         $deception->setAbility('CHA');
 
+        $skills = [
+            'acrobatics' => $acrobatics,
+            'arcana' => $arcana,
+            'athletics' => $athletics,
+            'stealth' => $stealth,
+            'animal_handling' => $animalHandling,
+            'sleight_of_hand' => $sleightOfHand,
+            'history' => $history,
+            'intimidation' => $intimidation,
+            'investigation' => $investigation,
+            'medicine' => $medicine,
+            'nature' => $nature,
+            'perception' => $perception,
+            'insight' => $insight,
+            'persuasion' => $persuasion,
+            'religion' => $religion,
+            'performance' => $performance,
+            'survival' => $survival,
+            'deception' => $deception,
+        ];
+
         $manager->persist($acrobatics);
         $manager->persist($arcana);
         $manager->persist($athletics);
@@ -100,6 +121,10 @@ class DefaultSkill extends Fixture
         $manager->persist($performance);
         $manager->persist($survival);
         $manager->persist($deception);
+
+        foreach ($skills as $reference => $skill) {
+            $this->addReference('skill_'.$reference, $skill);
+        }
 
         $manager->flush();
     }

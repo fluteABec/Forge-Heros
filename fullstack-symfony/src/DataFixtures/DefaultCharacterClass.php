@@ -3,79 +3,100 @@
 namespace App\DataFixtures;
 
 use App\Entity\CharacterClass;
+use App\Entity\Skill;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class DefaultCharacterClass extends Fixture
+class DefaultCharacterClass extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
+        $barbarian = new CharacterClass();
+        $barbarian->setName('Barbare');
+        $barbarian->setDescription('Guerrier sauvage anime par une rage devastatrice.');
+        $barbarian->setHealthDice(12);
+        $this->addSkills($barbarian, ['athletics', 'intimidation', 'perception']);
 
-        try {
-            $barbarian = new CharacterClass();
-            $barbarian->setName('Barbare');
-            $barbarian->setDescription('Guerrier sauvage animé par une rage dévastatrice.');
-            $barbarian->setHealthDice(12);
+        $bard = new CharacterClass();
+        $bard->setName('Barde');
+        $bard->setDescription('Artiste et conteur dont la musique possede un pouvoir magique.');
+        $bard->setHealthDice(8);
+        $this->addSkills($bard, ['performance', 'persuasion', 'history', 'deception']);
 
-            $bard = new CharacterClass();
-            $bard->setName('Barde');
-            $bard->setDescription('Artiste et conteur dont la musique possède un pouvoir magique.');
-            $bard->setHealthDice(8);
+        $cleric = new CharacterClass();
+        $cleric->setName('Clerc');
+        $cleric->setDescription('Serviteur divin canalisant la puissance de sa divinite.');
+        $cleric->setHealthDice(8);
+        $this->addSkills($cleric, ['medicine', 'religion', 'insight']);
 
-            $cleric = new CharacterClass();
-            $cleric->setName('Clerc');
-            $cleric->setDescription('Serviteur divin canalisant la puissance de sa divinité.');
-            $cleric->setHealthDice(8);
+        $druid = new CharacterClass();
+        $druid->setName('Druide');
+        $druid->setDescription('Gardien de la nature capable de se metamorphoser.');
+        $druid->setHealthDice(8);
+        $this->addSkills($druid, ['nature', 'animal_handling', 'survival', 'medicine']);
 
-            $druid = new CharacterClass();
-            $druid->setName('Druide');
-            $druid->setDescription('Gardien de la nature capable de se métamorphoser.');
-            $druid->setHealthDice(8);
+        $fighter = new CharacterClass();
+        $fighter->setName('Guerrier');
+        $fighter->setDescription('Maitre des armes et des tactiques de combat.');
+        $fighter->setHealthDice(10);
+        $this->addSkills($fighter, ['athletics', 'perception']);
 
-            $fighter = new CharacterClass();
-            $fighter->setName('Guerrier');
-            $fighter->setDescription('Maître des armes et des tactiques de combat.');
-            $fighter->setHealthDice(10);
+        $mage = new CharacterClass();
+        $mage->setName('Mage');
+        $mage->setDescription('Erudit de l\'arcane maitrisant de puissants sortileges.');
+        $mage->setHealthDice(6);
+        $this->addSkills($mage, ['arcana', 'history', 'investigation', 'religion']);
 
-            $mage = new CharacterClass();
-            $mage->setName('Mage');
-            $mage->setDescription('Érudit de l\'arcane maîtrisant de puissants sortilèges.');
-            $mage->setHealthDice(6);
+        $paladin = new CharacterClass();
+        $paladin->setName('Paladin');
+        $paladin->setDescription('Chevalier sacre combinant prouesse martiale et magie divine.');
+        $paladin->setHealthDice(10);
+        $this->addSkills($paladin, ['athletics', 'persuasion', 'religion', 'medicine']);
 
-            $paladin = new CharacterClass();
-            $paladin->setName('Paladin');
-            $paladin->setDescription('Chevalier sacré combinant prouesse martiale et magie divine.');
-            $paladin->setHealthDice(10);
+        $ranger = new CharacterClass();
+        $ranger->setName('Ranger');
+        $ranger->setDescription('Chasseur et pisteur expert des terres sauvages.');
+        $ranger->setHealthDice(10);
+        $this->addSkills($ranger, ['survival', 'perception', 'nature', 'animal_handling']);
 
-            $ranger = new CharacterClass();
-            $ranger->setName('Ranger');
-            $ranger->setDescription('Chasseur et pisteur expert des terres sauvages.');
-            $ranger->setHealthDice(10);
+        $sorcerer = new CharacterClass();
+        $sorcerer->setName('Sorcier');
+        $sorcerer->setDescription('Lanceur de sorts dont le pouvoir est inne et instinctif.');
+        $sorcerer->setHealthDice(6);
+        $this->addSkills($sorcerer, ['arcana', 'deception', 'persuasion']);
 
-            $sorcerer = new CharacterClass();
-            $sorcerer->setName('Sorcier');
-            $sorcerer->setDescription('Lanceur de sorts dont le pouvoir est inné et instinctif.');
-            $sorcerer->setHealthDice(6);
+        $rogue = new CharacterClass();
+        $rogue->setName('Voleur');
+        $rogue->setDescription('Specialiste de la discretion, du crochetage et des attaques sournoises.');
+        $rogue->setHealthDice(8);
+        $this->addSkills($rogue, ['stealth', 'sleight_of_hand', 'acrobatics', 'deception']);
 
-            $rogue = new CharacterClass();
-            $rogue->setName('Voleur');
-            $rogue->setDescription('Spécialiste de la discrétion, du crochetage et des attaques sournoises.');
-            $rogue->setHealthDice(8);
+        $manager->persist($barbarian);
+        $manager->persist($bard);
+        $manager->persist($cleric);
+        $manager->persist($druid);
+        $manager->persist($fighter);
+        $manager->persist($mage);
+        $manager->persist($paladin);
+        $manager->persist($ranger);
+        $manager->persist($sorcerer);
+        $manager->persist($rogue);
 
-            $manager->persist($barbarian);
-            $manager->persist($bard);
-            $manager->persist($cleric);
-            $manager->persist($druid);
-            $manager->persist($fighter);
-            $manager->persist($mage);
-            $manager->persist($paladin);
-            $manager->persist($ranger);
-            $manager->persist($sorcerer);
-            $manager->persist($rogue);
+        $manager->flush();
+    }
 
-            $manager->flush();
-        } catch (\Exception $e) {
+    public function getDependencies(): array
+    {
+        return [
+            DefaultSkill::class,
+        ];
+    }
 
+    private function addSkills(CharacterClass $characterClass, array $skillReferences): void
+    {
+        foreach ($skillReferences as $skillReference) {
+            $characterClass->addSkill($this->getReference('skill_'.$skillReference, Skill::class));
         }
     }
 }
