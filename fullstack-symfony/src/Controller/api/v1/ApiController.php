@@ -133,6 +133,9 @@ class ApiController extends AbstractController
             $data[] = [
                 'id' => $character->getId(),
                 'name' => $character->getName(),
+                'image' => $character->getImage()
+                    ? '/uploads/characters/' . $character->getImage()
+                    : null,
                 'class' => [
                     'id' => $character->getCharacterClass()?->getId(),
                     'name' => $character->getCharacterClass()?->getName(),
@@ -159,6 +162,9 @@ class ApiController extends AbstractController
         $data = [
                 'id' => $character->getId(),
                 'name' => $character->getName(),
+                'image' => $character->getImage()
+                    ? '/uploads/characters/' . $character->getImage()
+                    : null,
                 'level' => $character->getLevel(),
                 'strength' => $character->getStrength(),
                 'dexterity' => $character->getDexterity(),
