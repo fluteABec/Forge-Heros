@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Character;
 use App\Entity\User;
 use App\Form\CharacterType;
+use App\Repository\CharacterClassRepository;
 use App\Repository\CharacterRepository;
+use App\Repository\RaceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,10 +18,39 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CharacterController extends AbstractController
 {
     #[Route(name: 'app_character_index', methods: ['GET'])]
-    public function index(CharacterRepository $characterRepository): Response
+    public function index(
+        Request $request,
+        CharacterRepository $characterRepository,
+        CharacterClassRepository $characterClassRepository,
+        RaceRepository $raceRepository,
+    ): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException('Vous devez etre connecte pour consulter vos personnages.');
+        }
+
+        $name = trim((string) $request->query->get('character_name', ''));
+        $classId = (int) $request->query->get('character_class_id', 0);
+        $raceId = (int) $request->query->get('character_race_id', 0);
+
         return $this->render('character/index.html.twig', [
-            'characters' => $characterRepository->findBy(['user' => $this->getUser()]),
+            'characters' => $characterRepository->findFilteredByUser(
+                $user,
+                '' === $name ? null : $name,
+                $classId > 0 ? $classId : null,
+                $raceId > 0 ? $raceId : null,
+            ),
+            'character_classes' => $characterClassRepository->findBy([], ['name' => 'ASC']),
+            'races' => $raceRepository->findBy([], ['name' => 'ASC']),
+            'filters' => [
+                'character_name' => $name,
+                'character_class_id' => $classId > 0 ? $classId : null,
+                'character_race_id' => $raceId > 0 ? $raceId : null,
+            ],
         ]);
     }
 

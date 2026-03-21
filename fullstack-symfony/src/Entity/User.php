@@ -34,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Party>
      */
-    #[ORM\OneToMany(targetEntity: Party::class, mappedBy: 'creator')]
+    #[ORM\OneToMany(targetEntity: Party::class, mappedBy: 'user')]
     private Collection $parties;
 
     public function __construct()
@@ -119,7 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->parties->contains($party)) {
             $this->parties->add($party);
-            $party->setCreator($this);
+            $party->setUser($this);
         }
 
         return $this;
@@ -129,8 +129,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->parties->removeElement($party)) {
             // set the owning side to null (unless already changed)
-            if ($party->getCreator() === $this) {
-                $party->setCreator(null);
+            if ($party->getUser() === $this) {
+                $party->setUser(null);
             }
         }
 

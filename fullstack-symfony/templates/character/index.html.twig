@@ -7,10 +7,43 @@
         <div class="panel-header">
             <div>
                 <p class="eyebrow">Personnages</p>
-                <h1>Character index</h1>
+                <h1>Mes personnages</h1>
             </div>
-            <a class="button" href="{{ path('app_character_new') }}">Create new</a>
+            <a class="button" href="{{ path('app_character_new') }}">Creer un personnage</a>
         </div>
+
+        <form method="get" action="{{ path('app_character_index') }}" class="app-form">
+            <div>
+                <label for="character-name">Nom</label>
+                <input id="character-name" type="search" name="character_name" value="{{ filters.character_name }}">
+            </div>
+            <div>
+                <label for="character-class">Classe</label>
+                <select id="character-class" name="character_class_id">
+                    <option value="">Toutes</option>
+                    {% for character_class in character_classes %}
+                        <option value="{{ character_class.id }}" {% if filters.character_class_id == character_class.id %}selected{% endif %}>
+                            {{ character_class.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="character-race">Race</label>
+                <select id="character-race" name="character_race_id">
+                    <option value="">Toutes</option>
+                    {% for race in races %}
+                        <option value="{{ race.id }}" {% if filters.character_race_id == race.id %}selected{% endif %}>
+                            {{ race.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="hero-actions">
+                <button class="button" type="submit">Filtrer</button>
+                <a class="text-link" href="{{ path('app_character_index') }}">Reinitialiser</a>
+            </div>
+        </form>
 
         <div class="character-card-grid">
         {% for character in characters %}
@@ -64,13 +97,13 @@
                     </div>
 
                     <div class="hero-actions">
-                        <a class="text-link" href="{{ path('app_character_show', {'id': character.id}) }}">show</a>
-                        <a class="text-link" href="{{ path('app_character_edit', {'id': character.id}) }}">edit</a>
+                        <a class="text-link" href="{{ path('app_character_show', {'id': character.id}) }}">Voir</a>
+                        <a class="text-link" href="{{ path('app_character_edit', {'id': character.id}) }}">Modifier</a>
                     </div>
                 </div>
             </article>
         {% else %}
-            <p class="stat-label">no records found</p>
+            <p class="stat-label">Aucun personnage ne correspond aux filtres.</p>
         {% endfor %}
         </div>
     </section>

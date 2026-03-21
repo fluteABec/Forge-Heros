@@ -3,11 +3,17 @@
 {% block title %}Edit Party{% endblock %}
 
 {% block body %}
-    <h1>Edit Party</h1>
+    <h1>{{ is_owner ? 'Modifier le groupe' : 'Gerer mes personnages dans ce groupe' }}</h1>
 
-    {{ include('party/_form.html.twig', {'button_label': 'Update'}) }}
+    {% if not is_owner %}
+        <p>Vous pouvez seulement ajouter ou retirer vos propres personnages de ce groupe.</p>
+    {% endif %}
 
-    <a href="{{ path('app_party_index') }}">back to list</a>
+    {{ include('party/_form.html.twig', {'button_label': 'Enregistrer'}) }}
 
-    {{ include('party/_delete_form.html.twig') }}
+    <a href="{{ path('app_party_index') }}">Retour a la liste</a>
+
+    {% if is_owner %}
+        {{ include('party/_delete_form.html.twig') }}
+    {% endif %}
 {% endblock %}

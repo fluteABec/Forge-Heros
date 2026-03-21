@@ -16,6 +16,26 @@ class PartyRepository extends ServiceEntityRepository
         parent::__construct($registry, Party::class);
     }
 
+    /**
+     * @return Party[]
+     */
+    public function findFilteredByAvailability(?string $status): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.characters', 'c')
+            ->addSelect('c')
+            ->groupBy('p.id')
+            ->orderBy('p.name', 'ASC');
+
+        if ('available' === $status) {
+            $qb->andHaving('COUNT(c.id) < p.maxSize');
+        } elseif ('full' === $status) {
+            $qb->andHaving('COUNT(c.id) >= p.maxSize');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Party[] Returns an array of Party objects
 //     */

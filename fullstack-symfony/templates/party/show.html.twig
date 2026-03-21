@@ -3,32 +3,110 @@
 {% block title %}Party{% endblock %}
 
 {% block body %}
-    <h1>Party</h1>
+    <section class="panel">
+        <div class="panel-header">
+            <div>
+                <p class="eyebrow">Groupe</p>
+                <h1>{{ party.name }}</h1>
+            </div>
+            <div class="hero-actions">
+                <a class="text-link" href="{{ path('app_party_index') }}">back to list</a>
+                <a class="text-link" href="{{ path('app_party_edit', {'id': party.id}) }}">edit</a>
+            </div>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ party.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ party.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ party.description }}</td>
-            </tr>
-            <tr>
-                <th>MaxSize</th>
-                <td>{{ party.maxSize }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ party.id }}</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ party.name }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ party.description }}</td>
+                </tr>
+                <tr>
+                    <th>MaxSize</th>
+                    <td>{{ party.maxSize }} ({{ party.characters|length }} membre{{ party.characters|length > 1 ? 's' : '' }})</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <section class="panel">
+        <div class="party-members">
+            <div class="panel-header">
+                <div>
+                    <p class="eyebrow">Composition</p>
+                    <h2>Personnages du groupe</h2>
+                </div>
+            </div>
 
-    <a href="{{ path('app_party_index') }}">back to list</a>
+            <div class="character-card-grid">
+                {% for character in party.characters %}
+                    <article class="card character-card">
+                        {% if character.image %}
+                            <img
+                                class="character-card-image"
+                                src="{{ asset('uploads/characters/' ~ character.image) }}"
+                                alt="{{ character.name }}"
+                            >
+                        {% else %}
+                            <div class="character-card-placeholder">
+                                <span>No image</span>
+                            </div>
+                        {% endif %}
 
-    <a href="{{ path('app_party_edit', {'id': party.id}) }}">edit</a>
+                        <div class="card-body character-card-body">
+                            <div class="character-card-header">
+                                <div>
+                                    <h2 class="character-card-title">{{ character.name }}</h2>
+                                    <p class="stat-label">Niveau {{ character.level }}</p>
+                                </div>
+                                <div class="character-hp-badge">{{ character.healthPoints }} PV</div>
+                            </div>
 
-    {{ include('party/_delete_form.html.twig') }}
+                            <div class="character-stats-grid">
+                                <article class="stat-card">
+                                    <p class="stat-label">STR</p>
+                                    <p class="stat-value-small">{{ character.strength }}</p>
+                                </article>
+                                <article class="stat-card">
+                                    <p class="stat-label">DEX</p>
+                                    <p class="stat-value-small">{{ character.dexterity }}</p>
+                                </article>
+                                <article class="stat-card">
+                                    <p class="stat-label">CON</p>
+                                    <p class="stat-value-small">{{ character.constitution }}</p>
+                                </article>
+                                <article class="stat-card">
+                                    <p class="stat-label">INT</p>
+                                    <p class="stat-value-small">{{ character.intelligence }}</p>
+                                </article>
+                                <article class="stat-card">
+                                    <p class="stat-label">WIS</p>
+                                    <p class="stat-value-small">{{ character.wisdom }}</p>
+                                </article>
+                                <article class="stat-card">
+                                    <p class="stat-label">CHA</p>
+                                    <p class="stat-value-small">{{ character.charisma }}</p>
+                                </article>
+                            </div>
+
+                            <a class="text-link" href="{{ path('app_character_show', {'id': character.id}) }}">Voir le personnage</a>
+                        </div>
+                    </article>
+                {% else %}
+                    <p class="stat-label">Aucun personnage dans ce groupe.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if is_owner %}
+            {{ include('party/_delete_form.html.twig') }}
+        {% endif %}
+    </section>
 {% endblock %}

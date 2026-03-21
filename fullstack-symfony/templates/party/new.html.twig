@@ -3,9 +3,9 @@
 {% block title %}New Party{% endblock %}
 
 {% block body %}
-    <h1>Create new Party</h1>
+    <h1>Creer un groupe</h1>
 
-    {{ include('party/_form.html.twig') }}
+    {{ include('party/_form.html.twig', {'button_label': 'Creer'}) }}
 
-    <a href="{{ path('app_party_index') }}">back to list</a>
+    <a href="{{ path('app_party_index') }}">Retour a la liste</a>
 {% endblock %}
