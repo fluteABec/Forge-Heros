@@ -22,6 +22,7 @@ class PartyType extends AbstractType
         $party = $options['party'];
         $isOwner = $options['is_owner'];
 
+        // Le createur garde la main sur les metadonnees, les autres ne gerent que leurs personnages
         if ($isOwner) {
             $builder
                 ->add('name')
@@ -31,6 +32,7 @@ class PartyType extends AbstractType
 
         $selectedCharacters = new ArrayCollection();
 
+        // Preselectionne uniquement les personnages de l'utilisateur deja presents dans le groupe
         if ($party instanceof Party && $user instanceof User) {
             foreach ($party->getCharacters() as $character) {
                 if ($character->getUser() === $user) {
@@ -47,6 +49,7 @@ class PartyType extends AbstractType
                 'required' => false,
                 'mapped' => false,
                 'data' => $selectedCharacters,
+                // Restreint la liste aux personnages du joueur courant
                 'query_builder' => static function (EntityRepository $repository) use ($user) {
                     $qb = $repository->createQueryBuilder('c')
                         ->orderBy('c.name', 'ASC');

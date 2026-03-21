@@ -128,7 +128,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeParty(Party $party): static
     {
         if ($this->parties->removeElement($party)) {
-            // set the owning side to null (unless already changed)
             if ($party->getUser() === $this) {
                 $party->setUser(null);
             }

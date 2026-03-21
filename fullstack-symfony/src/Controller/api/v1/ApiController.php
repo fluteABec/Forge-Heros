@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api/v1', name: 'api_v1')]
-class ApiController extends AbstractController
+final class ApiController extends AbstractController
 {
     #[Route('/races', name: 'api_v1_races_index', methods: ['GET'])]
     public function races(RaceRepository $raceRepository): Response
@@ -68,6 +68,7 @@ class ApiController extends AbstractController
     #[Route('/classes/{id}', name: 'api_v1_classes_show', methods: ['GET'])]
     public function class(CharacterClass $characterClass): Response
     {
+        // Transforme la collection Doctrine en tableau JSON simple pour l'API
         $skillsData = [];
         foreach ($characterClass->getSkills() as $skill) {
             $skillsData[] = [
@@ -117,7 +118,7 @@ class ApiController extends AbstractController
     #[Route('/characters', name: 'api_v1_characters_index', methods: ['GET'])]
     public function characters(Request $request, CharacterRepository $characterRepository): Response
     {
-
+        // Filtres GET publics pour retrouver les personnages sans authentification
         $name = trim((string) $request->query->get('name', ''));
         $classId = (int) $request->query->get('class_id', 0);
         $raceId = (int) $request->query->get('race_id', 0);
@@ -128,6 +129,7 @@ class ApiController extends AbstractController
             $raceId > 0 ? $raceId : null,
         );
 
+        // La liste reste legere pour eviter de dupliquer toutes les statistiques partout
         $data = [];
         foreach ($characters as $character) {
             $data[] = [
@@ -136,6 +138,7 @@ class ApiController extends AbstractController
                 'image' => $character->getImage()
                     ? '/uploads/characters/' . $character->getImage()
                     : null,
+                'level' => $character->getLevel(),
                 'class' => [
                     'id' => $character->getCharacterClass()?->getId(),
                     'name' => $character->getCharacterClass()?->getName(),
@@ -152,6 +155,7 @@ class ApiController extends AbstractController
     #[Route('/characters/{id}', name: 'api_v1_characters_show', methods: ['GET'])]
     public function character(Character $character): Response
     {
+        // Le detail expose les relations utiles au front sans renvoyer les entites Doctrine brutes
         $partiesData = [];
         foreach ($character->getParties() as $party) {
             $partiesData[] = [
@@ -189,6 +193,7 @@ class ApiController extends AbstractController
     #[Route('/parties', name: 'api_v1_parties_index', methods: ['GET'])]
     public function parties(Request $request, PartyRepository $partyRepository): Response
     {
+        // Filtre GET public sur l'etat de remplissage du groupe
         $status = (string) $request->query->get('status', '');
         $status = in_array($status, ['full', 'available'], true) ? $status : null;
 
@@ -215,6 +220,7 @@ class ApiController extends AbstractController
     #[Route('/parties/{id}', name: 'api_v1_parties_show', methods: ['GET'])]
     public function party(Party $party): Response
     {
+        // Le detail du groupe embarque ses membres avec les infos utiles au front
         $membersData = [];
         foreach ($party->getCharacters() as $character) {
             $membersData[] = [

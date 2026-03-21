@@ -12,6 +12,7 @@ class DefaultCharacterClass extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
+        // Chaque classe recoit ici entre 2 et 4 competences pour alimenter l'app et l'API
         $barbarian = new CharacterClass();
         $barbarian->setName('Barbare');
         $barbarian->setDescription('Guerrier sauvage anime par une rage devastatrice.');
@@ -95,6 +96,7 @@ class DefaultCharacterClass extends Fixture implements DependentFixtureInterface
 
     private function addSkills(CharacterClass $characterClass, array $skillReferences): void
     {
+        // Resout les references declarees dans DefaultSkill pour eviter de dupliquer les objets Skill
         foreach ($skillReferences as $skillReference) {
             $characterClass->addSkill($this->getReference('skill_'.$skillReference, Skill::class));
         }

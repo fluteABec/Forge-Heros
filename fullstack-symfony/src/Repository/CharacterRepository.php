@@ -22,6 +22,7 @@ class CharacterRepository extends ServiceEntityRepository
      */
     public function findFilteredByUser(User $user, ?string $name, ?int $classId, ?int $raceId): array
     {
+        // Requete de la page web -> limitee au proprietaire des personnages
         $qb = $this->createQueryBuilder('c')
             ->leftJoin('c.characterClass', 'cc')
             ->leftJoin('c.race', 'r')
@@ -53,6 +54,7 @@ class CharacterRepository extends ServiceEntityRepository
      */
     public function findForApi(?string $name, ?int $classId, ?int $raceId): array
     {
+        // Requete de l'API publique -> aucun filtre par utilisateur
         $qb = $this->createQueryBuilder('c')
             ->leftJoin('c.characterClass', 'cc')
             ->leftJoin('c.race', 'r')
@@ -76,28 +78,4 @@ class CharacterRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
-//    /**
-//     * @return Character[] Returns an array of Character objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Character
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

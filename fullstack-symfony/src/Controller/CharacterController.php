@@ -25,6 +25,7 @@ final class CharacterController extends AbstractController
         RaceRepository $raceRepository,
     ): Response
     {
+        // Securite cote serveur -> non connecte -> pas d'acces a la liste
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();
@@ -33,6 +34,7 @@ final class CharacterController extends AbstractController
             throw $this->createAccessDeniedException('Vous devez etre connecte pour consulter vos personnages.');
         }
 
+        // Filtres GET conserves dans l'URL pour pouvoir raffiner la liste
         $name = trim((string) $request->query->get('character_name', ''));
         $classId = (int) $request->query->get('character_class_id', 0);
         $raceId = (int) $request->query->get('character_race_id', 0);
@@ -57,6 +59,7 @@ final class CharacterController extends AbstractController
     #[Route('/new', name: 'app_character_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Securite cote serveur -> non connecte -> pas d'acces a la creation
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $character = new Character();
@@ -70,7 +73,7 @@ final class CharacterController extends AbstractController
                 throw $this->createAccessDeniedException('Vous devez etre connecte pour creer un personnage.');
             }
 
-            //Calcul automatique des points de vies
+            // Calcul simplifie des points de vie a la creation du personnage
             $constitutionModifier = (int) floor(($character->getConstitution() - 10) / 2);
             $healthDice = $character->getCharacterClass()->getHealthDice();
             $healthPoints = $healthDice + $constitutionModifier;
@@ -78,7 +81,7 @@ final class CharacterController extends AbstractController
             $character->setHealthPoints($healthPoints);
             $character->setUser($user);
 
-            //POur l'image du perso
+            // Stockage de l'image dans le dossier public pour un acces direct depuis l'app et l'API
             $imageFile = $form->get('imageFile')->getData();
             if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);

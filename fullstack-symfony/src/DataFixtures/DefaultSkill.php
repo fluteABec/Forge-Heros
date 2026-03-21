@@ -82,6 +82,7 @@ class DefaultSkill extends Fixture
         $deception->setName('Tromperie');
         $deception->setAbility('CHA');
 
+        // References reutilisees par les fixtures de classes pour relier les competences
         $skills = [
             'acrobatics' => $acrobatics,
             'arcana' => $arcana,

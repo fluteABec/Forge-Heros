@@ -22,8 +22,10 @@ final class PartyController extends AbstractController
     #[Route(name: 'app_party_index', methods: ['GET'])]
     public function index(Request $request, PartyRepository $partyRepository): Response
     {
+        // Securite cote serveur -> seuls les utilisateurs connectes voient les groupes
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        // Filtre GET pour distinguer les groupes complets et ceux avec de la place
         $status = $request->query->getString('status', '');
         $status = in_array($status, ['full', 'available'], true) ? $status : null;
 
@@ -38,6 +40,7 @@ final class PartyController extends AbstractController
     #[Route('/new', name: 'app_party_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
+        // Securite cote serveur -> non connecte -> pas d'acces a la creation
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $party = new Party();
@@ -56,8 +59,11 @@ final class PartyController extends AbstractController
             }
 
             $party->setUser($user);
+
+            // Synchronise uniquement les personnages choisis par l'utilisateur courant
             $this->syncUserCharacters($party, $user, $form->get('characters')->getData());
 
+            // Validation supplementaire pour bloquer les incoherences de capacite
             if ($this->addValidationErrors($form, $validator->validate($party))) {
                 return $this->render('party/new.html.twig', [
                     'party' => $party,
@@ -80,6 +86,7 @@ final class PartyController extends AbstractController
     #[Route('/{id}', name: 'app_party_show', methods: ['GET'])]
     public function show(Party $party): Response
     {
+        // Securite cote serveur -> non connecte -> pas d'acces au detail
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         return $this->render('party/show.html.twig', [
@@ -91,6 +98,7 @@ final class PartyController extends AbstractController
     #[Route('/{id}/edit', name: 'app_party_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Party $party, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
+        // Securite cote serveur -> non connecte -> pas d'acces a la modification
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();
@@ -99,6 +107,7 @@ final class PartyController extends AbstractController
             throw $this->createAccessDeniedException('Vous devez etre connecte pour modifier un groupe.');
         }
 
+        // Le createur peut tout modifier, les autres seulement leurs personnages dans le groupe
         $isOwner = $user === $party->getUser();
         $form = $this->createForm(PartyType::class, $party, [
             'user' => $user,
@@ -133,6 +142,7 @@ final class PartyController extends AbstractController
     #[Route('/{id}', name: 'app_party_delete', methods: ['POST'])]
     public function delete(Request $request, Party $party, EntityManagerInterface $entityManager): Response
     {
+        // Securite cote serveur -> suppression reservee au createur du groupe
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if ($this->getUser() !== $party->getUser()) {
@@ -151,6 +161,7 @@ final class PartyController extends AbstractController
     {
         $selectedCharacters = $selectedCharacters instanceof Collection ? $selectedCharacters : null;
 
+        // Retire uniquement les personnages du joueur courant qu'il a decoches
         foreach ($party->getCharacters()->toArray() as $character) {
             if ($character->getUser() === $user && (null === $selectedCharacters || !$selectedCharacters->contains($character))) {
                 $party->removeCharacter($character);
@@ -161,6 +172,7 @@ final class PartyController extends AbstractController
             return;
         }
 
+        // Ajoute uniquement les personnages du joueur courant qu'il a coches
         foreach ($selectedCharacters as $character) {
             if ($character instanceof Character && $character->getUser() === $user) {
                 $party->addCharacter($character);
@@ -172,6 +184,7 @@ final class PartyController extends AbstractController
     {
         $hasErrors = false;
 
+        // Reinjecte les erreurs metier dans le formulaire pour rester sur l'ecran d'edition
         foreach ($violations as $violation) {
             $field = (string) $violation->getPropertyPath();
 

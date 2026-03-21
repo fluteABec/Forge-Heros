@@ -111,7 +111,6 @@ class CharacterClass
     public function removeCharacter(Character $character): static
     {
         if ($this->characters->removeElement($character)) {
-            // set the owning side to null (unless already changed)
             if ($character->getCharacterClass() === $this) {
                 $character->setCharacterClass(null);
             }

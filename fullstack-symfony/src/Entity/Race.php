@@ -82,7 +82,6 @@ class Race
     public function removeCharacter(Character $character): static
     {
         if ($this->characters->removeElement($character)) {
-            // set the owning side to null (unless already changed)
             if ($character->getRace() === $this) {
                 $character->setRace(null);
             }
