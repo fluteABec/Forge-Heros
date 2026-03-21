@@ -1,120 +1,109 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import CharactersPage from './components/CharactersPage'
+import GroupsPage from './components/GroupsPage'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentPage, setCurrentPage] = useState('home')
+  const [selectedCharacterId, setSelectedCharacterId] = useState(null)
+  const [selectedGroupId, setSelectedGroupId] = useState(null)
+
+  const openPage = (page, event) => {
+    event.preventDefault()
+    setCurrentPage(page)
+    if (page !== 'characters') {
+      setSelectedCharacterId(null)
+    }
+    if (page !== 'groups') {
+      setSelectedGroupId(null)
+    }
+  }
+
+  const navigateToGroupDetail = (groupId = null) => {
+    setCurrentPage('groups')
+    setSelectedGroupId(groupId)
+  }
+
+  const navigateToCharacterDetail = (characterId = null) => {
+    setCurrentPage('characters')
+    setSelectedCharacterId(characterId)
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
+    <div className="page-shell">
+      <header className="topbar">
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
+          <a
+            className="brand"
+            href="#home"
+            onClick={(event) => openPage('home', event)}
+          >
+            Forge de Heros
+          </a>
+          <nav className="nav-links" aria-label="Main navigation">
+            <a
+              href="#groups"
+              className={currentPage === 'groups' ? 'active' : ''}
+              onClick={(event) => openPage('groups', event)}
+            >
+              Groupes
+            </a>
+            <a
+              href="#characters"
+              className={currentPage === 'characters' ? 'active' : ''}
+              onClick={(event) => openPage('characters', event)}
+            >
+              Personnages
+            </a>
+          </nav>
         </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
+      <main className="main-content">
+        {currentPage === 'home' && (
+          <section className="hero hero-large">
+            <div>
+              <p className="eyebrow">Application React</p>
+              <h1>Bienvenue dans la Forge</h1>
+              <p className="hero-text">
+                Cette application vous permet de consulter et gerer des
+                personnages de jeu de role, leurs classes, leurs races et leurs
+                groupes d&apos;aventure.
+              </p>
+              <div className="hero-actions">
+                <a
+                  className="button"
+                  href="#groups"
+                  onClick={(event) => openPage('groups', event)}
+                >
+                  Voir les groupes
+                </a>
+                <a
+                  className="button button-secondary"
+                  href="#characters"
+                  onClick={(event) => openPage('characters', event)}
+                >
+                  Voir les personnages
+                </a>
+              </div>
+            </div>
+          </section>
+        )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {currentPage === 'groups' && (
+          <GroupsPage
+            externalSelectedGroupId={selectedGroupId}
+            onNavigateToCharacter={navigateToCharacterDetail}
+          />
+        )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        {currentPage === 'characters' && (
+          <CharactersPage
+            onNavigateToGroups={navigateToGroupDetail}
+            externalSelectedCharacterId={selectedCharacterId}
+          />
+        )}
+      </main>
+    </div>
   )
 }
 
