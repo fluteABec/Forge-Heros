@@ -32,6 +32,7 @@ function GroupsPage({ externalSelectedGroupId, onNavigateToCharacter }) {
       setError('')
 
       try {
+        // Recupere la liste publique des groupes via l'API Symfony.
         const response = await fetch(`${API_BASE_URL}/api/v1/parties`, {
           signal: controller.signal,
         })
@@ -57,6 +58,7 @@ function GroupsPage({ externalSelectedGroupId, onNavigateToCharacter }) {
   }, [])
 
   const filteredGroups = groups.filter((group) => {
+    // Filtrage local pour afficher seulement les groupes non complets.
     if (!showAvailableOnly) return true
     const memberCount = Number(group.memberCount ?? 0)
     const maxSize = Number(group.maxSize ?? 0)
@@ -64,6 +66,7 @@ function GroupsPage({ externalSelectedGroupId, onNavigateToCharacter }) {
   })
 
   if (selectedGroupId !== null) {
+    // Affiche le detail d'un groupe quand il est selectionne.
     return (
       <GroupDetail
         groupId={selectedGroupId}

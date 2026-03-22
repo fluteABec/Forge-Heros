@@ -9,6 +9,7 @@ function resolveImageUrl(imagePath, apiBaseUrl) {
   const cleanBaseUrl = apiBaseUrl.replace(/\/$/, '')
   const cleanPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`
 
+  // Construit une URL absolue vers l'image hebergee par Symfony.
   return `${cleanBaseUrl}${cleanPath}`
 }
 
@@ -46,6 +47,7 @@ function CharacterDetail({ characterId, apiBaseUrl, onBack, onNavigateToGroups }
       setSkills([])
 
       try {
+        // 1) Charge le detail principal du personnage.
         const response = await fetch(`${apiBaseUrl}/api/v1/characters/${characterId}`, {
           signal: controller.signal,
         })
@@ -57,6 +59,7 @@ function CharacterDetail({ characterId, apiBaseUrl, onBack, onNavigateToGroups }
         const detail = await response.json()
         setCharacter(detail)
 
+        // 2) Charge les competences via la classe du personnage.
         const classId = detail.class?.id || detail.characterClass?.id
         if (classId) {
           const classResponse = await fetch(`${apiBaseUrl}/api/v1/classes/${classId}`, {
@@ -125,6 +128,7 @@ function CharacterDetail({ characterId, apiBaseUrl, onBack, onNavigateToGroups }
           <h3>Statistiques</h3>
           <div className="stats-list">
             {stats.map((stat) => {
+              // Barre visuelle basee sur une echelle 0-20.
               const width = `${Math.max(0, Math.min(100, (stat.value / 20) * 100))}%`
               return (
                 <div className="stat-row" key={stat.label}>

@@ -5,6 +5,7 @@ import CharacterDetail from './CharacterDetail'
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
 function normalizeCharacters(payload) {
+	// Accepte plusieurs formats de reponse API pour rester robuste.
 	if (Array.isArray(payload)) return payload
 	if (Array.isArray(payload?.items)) return payload.items
 	if (Array.isArray(payload?.data)) return payload.data
@@ -47,6 +48,7 @@ function CharactersPage({ onNavigateToGroups, externalSelectedCharacterId }) {
 			setError('')
 
 			try {
+				// Recupere la liste publique depuis Symfony API.
 				const response = await fetch(`${API_BASE_URL}/api/v1/characters`, {
 					signal: controller.signal,
 				})
@@ -77,6 +79,7 @@ function CharactersPage({ onNavigateToGroups, externalSelectedCharacterId }) {
 
 	const normalizedNameFilter = nameFilter.trim().toLowerCase()
 
+	// Filtre local: nom + classe + race.
 	const filteredCharacters = characters.filter((character) => {
 		const characterName = (character.name || '').toLowerCase()
 		const characterClassName = getClassName(character)
@@ -90,6 +93,7 @@ function CharactersPage({ onNavigateToGroups, externalSelectedCharacterId }) {
 		return matchesName && matchesClass && matchesRace
 	})
 
+	// Tri local configurable pour la demo front.
 	const sortedCharacters = [...filteredCharacters].sort((a, b) => {
 		if (sortBy === 'name-asc') {
 			return (a.name || '').localeCompare(b.name || '', 'fr')
@@ -111,6 +115,7 @@ function CharactersPage({ onNavigateToGroups, externalSelectedCharacterId }) {
 	})
 
 	if (selectedCharacterId !== null) {
+		// En mode detail, la liste est remplacee par la vue detail du personnage.
 		return (
 			<CharacterDetail
 				characterId={selectedCharacterId}

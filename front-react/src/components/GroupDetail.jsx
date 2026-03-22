@@ -13,6 +13,7 @@ function GroupDetail({ groupId, apiBaseUrl, onBack, onNavigateToCharacter }) {
       setError('')
 
       try {
+        // Charge le detail complet du groupe avec sa liste de membres.
         const response = await fetch(`${apiBaseUrl}/api/v1/parties/${groupId}`, {
           signal: controller.signal,
         })
@@ -51,6 +52,7 @@ function GroupDetail({ groupId, apiBaseUrl, onBack, onNavigateToCharacter }) {
 
   const maxSize = Number(group.maxSize ?? 0)
   const memberCount = Number(group.memberCount ?? 0)
+  // Valeur affichee a l'ecran pour indiquer la capacite restante.
   const remainingPlaces = Math.max(0, maxSize - memberCount)
   const members = Array.isArray(group.members) ? group.members : []
 

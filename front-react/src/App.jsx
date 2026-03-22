@@ -7,6 +7,7 @@ function App() {
   const [selectedCharacterId, setSelectedCharacterId] = useState(null)
   const [selectedGroupId, setSelectedGroupId] = useState(null)
 
+  // Navigation interne simple sans react-router.
   const openPage = (page, event) => {
     event.preventDefault()
     setCurrentPage(page)
@@ -23,6 +24,7 @@ function App() {
     setSelectedGroupId(groupId)
   }
 
+  // Permet de sauter d'une vue a une autre avec un id cible preselectionne.
   const navigateToCharacterDetail = (characterId = null) => {
     setCurrentPage('characters')
     setSelectedCharacterId(characterId)

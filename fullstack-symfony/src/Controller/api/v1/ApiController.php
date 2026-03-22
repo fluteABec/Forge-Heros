@@ -22,6 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api/v1', name: 'api_v1')]
 final class ApiController extends AbstractController
 {
+    // Endpoints publics: l'application React lit ici toutes les donnees d'affichage.
     #[Route('/races', name: 'api_v1_races_index', methods: ['GET'])]
     public function races(RaceRepository $raceRepository): Response
     {
@@ -40,6 +41,7 @@ final class ApiController extends AbstractController
     #[Route('/races/{id}', name: 'api_v1_races_show', methods: ['GET'])]
     public function race(Race $race): Response
     {
+        // Retourne un objet simple plutot que l'entite Doctrine brute.
         $data = [
             'id' => $race->getId(),
             'name' => $race->getName(),
@@ -52,6 +54,7 @@ final class ApiController extends AbstractController
     #[Route('/classes', name: 'api_v1_classes_index', methods: ['GET'])]
     public function classes(CharacterClassRepository $characterClassRepository): Response
     {
+        // Liste legere des classes (sans les competences detaillees).
         $classes = $characterClassRepository->findBy([], ['name' => 'ASC']);
         $data = [];
         foreach ($classes as $class) {

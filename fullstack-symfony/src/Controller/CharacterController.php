@@ -111,6 +111,7 @@ final class CharacterController extends AbstractController
     #[Route('/{id}', name: 'app_character_show', methods: ['GET'])]
     public function show(Character $character): Response
     {
+        // Affiche le detail d'un personnage deja resolu par son id dans l'URL.
         return $this->render('character/show.html.twig', [
             'character' => $character,
         ]);
@@ -119,6 +120,7 @@ final class CharacterController extends AbstractController
     #[Route('/{id}/edit', name: 'app_character_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Character $character, EntityManagerInterface $entityManager): Response
     {
+        // Recharge le meme formulaire que la creation, mais pre-rempli avec les donnees existantes.
         $form = $this->createForm(CharacterType::class, $character);
         $form->handleRequest($request);
 
@@ -137,6 +139,7 @@ final class CharacterController extends AbstractController
     #[Route('/{id}', name: 'app_character_delete', methods: ['POST'])]
     public function delete(Request $request, Character $character, EntityManagerInterface $entityManager): Response
     {
+        // La suppression est protegee par token CSRF pour eviter les requetes malicieuses.
         if ($this->isCsrfTokenValid('delete'.$character->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($character);
             $entityManager->flush();
