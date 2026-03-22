@@ -1,13 +1,21 @@
-{{ form_start(form, { attr: { class: 'app-form', id: 'character-form' } }) }}
+{{ form_start(form, {
+    attr: {
+        class: 'app-form',
+        id: 'character-form',
+        'data-controller': 'point-buy',
+        'data-point-buy-budget-value': '27',
+        'data-point-buy-base-value': '8'
+    }
+}) }}
 
 <div class="point-buy-box">
     <div>
         <p class="eyebrow">Repartition des points</p>
         <p class="point-buy-text">
-            Points restants : <strong id="points-remaining">27</strong> / 27
+            Points restants : <strong id="points-remaining" data-point-buy-target="remaining">27</strong> / 27
         </p>
     </div>
-    <p class="stat-label" id="points-status">
+    <p class="stat-label" id="points-status" data-point-buy-target="status">
         Chaque caracteristique part de 8 et coute 1 point par niveau supplementaire.
     </p>
 </div>
@@ -15,61 +23,3 @@
 {{ form_widget(form) }}
 <button class="button">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('character-form');
-
-        if (!form) {
-            return;
-        }
-
-        const statIds = [
-            'character_strength',
-            'character_dexterity',
-            'character_constitution',
-            'character_intelligence',
-            'character_wisdom',
-            'character_charisma'
-        ];
-
-        const remainingElement = document.getElementById('points-remaining');
-        const statusElement = document.getElementById('points-status');
-        const statInputs = statIds
-            .map((id) => document.getElementById(id))
-            .filter((input) => input !== null);
-
-        const updatePoints = () => {
-            let totalCost = 0;
-
-            statInputs.forEach((input) => {
-                const value = parseInt(input.value || '8', 10);
-                totalCost += value - 8;
-            });
-
-            const remaining = 27 - totalCost;
-            remainingElement.textContent = remaining;
-
-            if (remaining < 0) {
-                remainingElement.classList.add('is-invalid');
-                statusElement.textContent = 'La repartition depasse 27 points.';
-                statusElement.classList.add('is-invalid');
-            } else if (remaining === 0) {
-                remainingElement.classList.remove('is-invalid');
-                statusElement.textContent = 'Tous les points ont ete utilises.';
-                statusElement.classList.remove('is-invalid');
-            } else {
-                remainingElement.classList.remove('is-invalid');
-                statusElement.textContent = 'Il reste encore des points a repartir.';
-                statusElement.classList.remove('is-invalid');
-            }
-        };
-
-        statInputs.forEach((input) => {
-            input.addEventListener('input', updatePoints);
-            input.addEventListener('change', updatePoints);
-        });
-
-        updatePoints();
-    });
-</script>
