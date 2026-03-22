@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class DisplayController extends AbstractController
 {
@@ -42,7 +43,9 @@ final class DisplayController extends AbstractController
 
 
     #[Route('/users', name: 'app_user_index', methods: ['GET'])]
-    public function users(userRepository $userRepository): Response
+    // La liste complete des utilisateurs est accessible uniquement aux administrateurs.
+    #[IsGranted('ROLE_ADMIN')]
+    public function users(UserRepository $userRepository): Response
     {
         return $this->render('pages/user/index.html.twig', [
             'users' => $userRepository->findAll(),
